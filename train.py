@@ -32,11 +32,9 @@ def load_data(file_name,input_channels,height=8,width=8):
 
     board_features = df.drop(columns=['evaluation', 'material_imbalance']).values
     
-    # Reshape the flattened board data back to the original shape
     num_samples = board_features.shape[0]
     board_data = board_features.reshape(num_samples, input_channels, height, width)
-    
-    # Convert numpy arrays to PyTorch tensors
+
     extra_features = torch.from_numpy(material_imbalance_data).float()
     y = torch.from_numpy(evaluation_data).float()
 
@@ -113,7 +111,7 @@ y_test = torch.from_numpy(y_test_scaled).float()
 
 model = board_utils.CNN_Regressor(n_input_channels,extra_features_size)
 
-criterion = nn.MSELoss() # For Mean Squared Error
+criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.005)
 
 train_losses = []
@@ -121,7 +119,7 @@ val_losses = []
 
 for epoch in range(n_epochs):
     # Training loop
-    model.train() # Set model to training mode
+    model.train()
     train_loss = 0.0
     batch_no = 0
     for i in range(0, X_train.shape[0], batch_size):
@@ -150,7 +148,7 @@ for epoch in range(n_epochs):
         val_losses.append(val_loss)
         print(f"Epoch [{epoch+1}/{n_epochs}], Validation Loss: {val_loss:.4f}")
 
-# # After training, evaluate on the test set
+# After training, evaluate on the test set
 model.eval()
 test_loss = 0.0
 with torch.no_grad():
