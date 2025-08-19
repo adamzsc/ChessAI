@@ -6,38 +6,19 @@ import numpy as np
 
 class CNN_Regressor(nn.Module):
     def __init__(self, input_channels, extra_features_size):
-        """
-        Initializes a simple CNN for regression.
         
-        The model now takes two inputs: the 4-channel board representation and 
-        a vector of extra features (e.g., material imbalance).
-
-        Args:
-            input_channels (int): The number of channels in the input image.
-                                  This should be 4 for this implementation.
-            extra_features_size (int): The size of the extra feature vector.
-        """
         super(CNN_Regressor, self).__init__()
         
-        # First convolutional block
-        # Input size: 4x8x8
         self.conv1 = nn.Conv2d(in_channels=input_channels, out_channels=32, kernel_size=3, padding=1)
         self.relu1 = nn.ReLU()
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-        # After conv1 and pool1: 32x4x4
 
-        # Second convolutional block
-        # Input size: 32x4x4
         self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
         self.relu2 = nn.ReLU()
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        # After conv2 and pool2: 64x2x2
 
-        # Flatten layer to prepare for dense layers
         self.flatten = nn.Flatten()
-        
-        # Define the input size for the first fully connected layer.
-        # This is the flattened output from the CNN plus the extra features.
+
         cnn_output_size = 64 * 2 * 2
         fc1_input_size = cnn_output_size + extra_features_size
         
@@ -66,29 +47,12 @@ class CNN_Regressor(nn.Module):
         return x
 
 def save_model(model, path):
-    """
-    Saves the model's state dictionary to a file.
-    
-    Args:
-        model (nn.Module): The PyTorch model to save.
-        path (str): The file path to save the model to.
-    """
+
     torch.save(model.state_dict(), path)
     print(f"Model saved successfully to {path}")
 
 def load_model(model_class, path, input_channels, extra_features_size):
-    """
-    Loads a model's state dictionary from a file.
-    
-    Args:
-        model_class (nn.Module): The class of the model to load into.
-        path (str): The file path to load the model from.
-        input_channels (int): Number of channels for model initialization.
-        extra_features_size (int): Size of extra features for model initialization.
-    
-    Returns:
-        nn.Module: The loaded model.
-    """
+
     model = model_class(input_channels, extra_features_size)
     model.load_state_dict(torch.load(path))
     model.eval()
