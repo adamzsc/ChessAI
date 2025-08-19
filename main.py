@@ -25,7 +25,6 @@ def minimax(depth,move,maximizingPlayer,alpha,beta,board,model,n_input_channels,
      
         best = -np.inf
 
-        # Recur for left and right children 
         for move in board.legal_moves: 
             board.push(move)
             val = minimax(depth + 1, move,
@@ -48,8 +47,6 @@ def minimax(depth,move,maximizingPlayer,alpha,beta,board,model,n_input_channels,
     else:
         best = np.inf
 
-        # Recur for left and 
-        # right children 
         for move in board.legal_moves: 
             board.push(move)
             val = minimax(depth + 1, move,
