@@ -22,7 +22,7 @@ class Engine():
     
     def __init__(self,engine_path,scalers_board_filename,scaler_extra_filename,scaler_y_filename):
         
-        self.scaler_board = joblib.load("scalers/"+scalers_board_filename)
+        self.scalers_board = joblib.load("scalers/"+scalers_board_filename)
         self.scaler_extra = joblib.load("scalers/"+scaler_extra_filename)
         self.scaler_y = joblib.load("scalers/"+scaler_y_filename)
         
@@ -34,7 +34,7 @@ class Engine():
         self.killer_moves = [[None, None] for _ in range(100)]
         
 
-    def minimax(self,depth,move,maximizingPlayer,alpha,beta,board,model,n_input_channels,scalers_board,scaler_extra,scaler_y): 
+    def minimax(self, depth, move, maximizingPlayer, alpha, beta, board): 
         
         moves = {}
         
@@ -48,7 +48,7 @@ class Engine():
      
             for move in board.legal_moves: 
                 board.push(move)
-                val = self.minimax(depth + 1, move, False, alpha, beta,board.copy()) 
+                val = self.minimax(depth + 1, move, False, alpha, beta, board.copy()) 
                 board.pop()
                     
                 best = max(best, val) 
@@ -69,7 +69,7 @@ class Engine():
     
             for move in board.legal_moves: 
                 board.push(move)
-                val = self.minimax(depth + 1, move, True, alpha, beta,board.copy()) 
+                val = self.minimax(depth + 1, move, True, alpha, beta, board.copy()) 
                 board.pop()
             
                 best = min(best, val) 
@@ -85,7 +85,7 @@ class Engine():
                 return moves
             return best
     
-    def get_evaluation(self,board):
+    def get_evaluation(self, board):
         material_imbalance = b.get_material_imbalance(board)
         board_features = b.get_board_channels(board)
     
@@ -112,7 +112,7 @@ class Engine():
         return evaluation_rescaled[0,0]/100
     
     
-    def move(self,board,model,n_input_channels,scalers_board,scaler_extra,scaler_y):
+    def move(self, board):
         
         if board.fullmove_number < 5:
             fen = board.fen()
@@ -133,7 +133,7 @@ class Engine():
         print("Best Move:",move)
         return move
     
-    def get_lichess_opening_data(self,fen):
+    def get_lichess_opening_data(self, fen):
         try:
             url = "https://explorer.lichess.ovh/masters"
             params = {
@@ -150,7 +150,7 @@ class Engine():
         except requests.exceptions.RequestException as e:
             print(f"Error fetching data from Lichess API: {e}")
             return None
-       
+        
 engine_path = 'chess_cnn_model.pth'
        
 scalers_board_filename = 'scalers_board.joblib'
