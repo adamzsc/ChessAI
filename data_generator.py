@@ -96,7 +96,7 @@ def analyse_PGN_file(pgn, engine, df):
     return df    
 
 
-engine = chess.engine.SimpleEngine.popen_uci(r"C:\Users\amsmi\Downloads\stockfish\stockfish-windows-x86-64-avx2.exe")
+engine = chess.engine.SimpleEngine.popen_uci(r"C:\Users\Adam\Desktop\Python\Chess\other\stockfish\stockfish-windows-x86-64-avx2.exe")
 
 pgn_file_name = "pgn_database"
 

@@ -41,15 +41,15 @@ class CNN_Regressor(nn.Module):
 
 def save_model(model, path):
 
-    torch.save(model.state_dict(), path)
-    print(f"Model saved successfully to {path}")
+    torch.save(model.state_dict(), "cnn_models/"+path)
+    #print(f"Model saved successfully to {path}")
 
 def load_model(model_class, path, input_channels, extra_features_size):
 
     model = model_class(input_channels, extra_features_size)
-    model.load_state_dict(torch.load(path))
+    model.load_state_dict(torch.load("cnn_models/"+path))
     model.eval()
-    print(f"Model loaded successfully from {path}")
+    #print(f"Model loaded successfully from {path}")
     return model
 
 def get_board_channels(board):
